@@ -13,7 +13,12 @@ void InsertionSort(int arr[], int size);
 void SelectionSort(int arr[], int size);
 void ShellSort(int arr[], int size);
 void QuickSort(int arr[], int size);
+void RecursiveQuickSort(int arr[], int low, int high);
+int GetArrayPivotPos(int arr[], int low, int high);
+
 void PrintArray(int arr[], int size);
+void SwapNumbers(int* a, int* b);
+
 
 int main()
 {
@@ -27,11 +32,11 @@ int main()
 
 #pragma region BubbleSort
 
-	BubbleSort(arrayToSort, size(arrayToSort));
+	QuickSort(arrayToSort, size(arrayToSort));
 	PrintArray(arrayToSort, size(arrayToSort));
 
-	BubbleSort(arrayToSort1, size(arrayToSort1));
-	PrintArray(arrayToSort1, size(arrayToSort1));
+	//BubbleSort(arrayToSort1, size(arrayToSort1));
+	//PrintArray(arrayToSort1, size(arrayToSort1));
 
 #pragma endregion BubbleSort
 
@@ -91,9 +96,8 @@ void BubbleSort(int arr[], int size)
 			if (arr[j] > arr[j + 1])
 			{
 				ordered = false;
-				aux = arr[j];
-				arr[j] = arr[j + 1];
-				arr[j + 1] = aux;
+				SwapNumbers(&arr[j+1], &arr[j]);
+
 			}
 		}
 	}
@@ -132,9 +136,8 @@ void SelectionSort(int arr[], int size)
 				minPos = j;
 
 		// Put the min number on the current position
-		aux = arr[minPos];
-		arr[minPos] = arr[i];
-		arr[i] = aux;
+		SwapNumbers(&arr[minPos], &arr[i]);
+
 
 	}
 
@@ -157,9 +160,8 @@ void ShellSort(int arr[], int size)
 			if (arr[i] > arr[i + gap])
 			{
 				ordered = false;
-				aux = arr[i];
-				arr[i] = arr[i + gap];
-				arr[i + gap] = aux;
+
+				SwapNumbers(&arr[i+gap], &arr[i]);
 			}
 		}
 		// If the array hasnt changed in the last loop reduce the gap
@@ -170,7 +172,39 @@ void ShellSort(int arr[], int size)
 
 void QuickSort(int arr[], int size)
 {
+	RecursiveQuickSort(arr, 0, size - 1);
+}
 
+void RecursiveQuickSort(int arr[], int low, int high)
+{
+	if (low < high)
+	{
+		int midPos = GetArrayPivotPos(arr, low, high);
+
+		RecursiveQuickSort(arr, low, midPos - 1);
+		RecursiveQuickSort(arr, midPos + 1, high);
+	}
+}
+
+int GetArrayPivotPos(int arr[], int low, int high)
+{
+	int aux;
+	int pivot = arr[high];
+	int i = low;
+
+	for (size_t j = low; j < high; j++)
+	{
+		if (arr[j] < pivot)
+		{
+			SwapNumbers(&arr[j], &arr[i]);
+			i++;
+		}
+	}
+
+	SwapNumbers(&arr[high], &arr[i]);
+
+
+	return i;
 }
 
 void PrintArray(int arr[], int size)
@@ -181,5 +215,12 @@ void PrintArray(int arr[], int size)
 		cout << arr[i] << ", ";
 	}
 	cout << endl;
+}
+
+void SwapNumbers(int* a, int* b)
+{
+	int t = *a;
+	*a = *b;
+	*b = t;
 }
 #pragma endregion Sorts
