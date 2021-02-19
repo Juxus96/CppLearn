@@ -8,21 +8,45 @@ using namespace std;
 void StringTests();
 void FloatTests();
 
-void BubbleSort(int arr[], int size);
-void InsertionSort(int arr[], int size);
-void SelectionSort(int arr[], int size);
-void ShellSort(int arr[], int size);
-void QuickSort(int arr[], int size);
-void RecursiveQuickSort(int arr[], int low, int high);
-int GetArrayPivotPos(int arr[], int low, int high);
+template<class T>
+void BubbleSort(T arr[], int size);
+template<class T>
+void InsertionSort(T arr[], int size);
+template<class T>
+void SelectionSort(T arr[], int size);
+template<class T>
+void ShellSort(T arr[], int size);
+template<class T>
+void QuickSort(T arr[], int size);
+template<class T>
+void RecursiveQuickSort(T arr[], int low, int high);
+template<class T>
+int GetArrayPivotPos(T arr[], int low, int high);
 
-void PrintArray(int arr[], int size);
-void SwapNumbers(int* a, int* b);
+template<class T>
+void PrintArray(T arr[], int size);
+template<class T>
+void SwapPositions(T& a, T& b);
 
-bool SequentialSearch(int arr[], int size, int find);
-bool BinarySearch(int arr[], int size, int find);
+template<class T>
+bool SequentialSearch(T arr[], int size, T find);
+template<class T>
+bool BinarySearch(T arr[], int size, T find);
 
+struct Author
+{
+	string name;
+	int age;
+}
+aut = {"Pepe", 38};
 
+struct Song 
+{
+	Author aut;
+	string name;
+	float duration;
+}
+songs[] ={ {aut, "aaaa", 5.0}, { {"Michael", 46}, "bbbb", 3.0 }};
 
 
 int main()
@@ -30,13 +54,12 @@ int main()
 	//StringTests();
 	//FloatTests();
 
-
-	int arrayToSort[] = { 4, 1, 23, 6, 7, 8, 4, 0 };
+	float arrayToSort[] = { 4, 1, 23, 6, 7, 8, 4, 0 };
 	int arrayToSort1[] = { 1, 2, 3, 7, 4, 5, 6, 7, 8, 9 };
 
 	QuickSort(arrayToSort, size(arrayToSort));
 	PrintArray(arrayToSort, size(arrayToSort));
-	if (BinarySearch(arrayToSort, size(arrayToSort), 24))
+	if (BinarySearch(arrayToSort, size(arrayToSort), 23.0f))
 			cout << "found" << endl;
 	system("pause");
 
@@ -64,6 +87,7 @@ void FloatTests()
 	float fTest = 2.192631923;
 	cout << "Float: ";
 	//cin >> fTest; // you can read more inputs //cin >> var1 >> var2 >> varN;
+	// use fflush(stdin) to empty the buffer in case its overloaded
 	cout << fTest << endl;
 	cout << setprecision(2) << fixed;
 	cout << fTest << endl;
@@ -75,7 +99,8 @@ void FloatTests()
 
 #pragma region Sorts
 
-void BubbleSort(int arr[], int size)
+template<class T>
+void BubbleSort(T arr[], int size)
 {
 	int aux; // Helps with the number swap
 	bool ordered = false; // Checks if the loop did any changes in the array
@@ -90,14 +115,15 @@ void BubbleSort(int arr[], int size)
 			if (arr[j] > arr[j + 1])
 			{
 				ordered = false;
-				SwapNumbers(&arr[j+1], &arr[j]);
+				SwapPositions(arr[j+1], arr[j]);
 
 			}
 		}
 	}
 }
 
-void InsertionSort(int arr[], int size)
+template<class T>
+void InsertionSort(T arr[], int size)
 {
 	int aux, pos;
 	for (size_t i = 0; i < size; i++)
@@ -117,7 +143,8 @@ void InsertionSort(int arr[], int size)
 	}
 }
 
-void SelectionSort(int arr[], int size)
+template<class T>
+void SelectionSort(T arr[], int size)
 {
 	int aux;
 
@@ -130,14 +157,15 @@ void SelectionSort(int arr[], int size)
 				minPos = j;
 
 		// Put the min number on the current position
-		SwapNumbers(&arr[minPos], &arr[i]);
+		SwapPositions(arr[minPos], arr[i]);
 
 
 	}
 
 }
 
-void ShellSort(int arr[], int size)
+template<class T>
+void ShellSort(T arr[], int size)
 {
 	int aux, gap;
 	bool ordered = true;;
@@ -155,7 +183,7 @@ void ShellSort(int arr[], int size)
 			{
 				ordered = false;
 
-				SwapNumbers(&arr[i+gap], &arr[i]);
+				SwapPositions(arr[i+gap], arr[i]);
 			}
 		}
 		// If the array hasnt changed in the last loop reduce the gap
@@ -164,12 +192,14 @@ void ShellSort(int arr[], int size)
 	}
 }
 
-void QuickSort(int arr[], int size)
+template<class T>
+void QuickSort(T arr[], int size)
 {
 	RecursiveQuickSort(arr, 0, size - 1);
 }
 
-void RecursiveQuickSort(int arr[], int low, int high)
+template<class T>
+void RecursiveQuickSort(T arr[], int low, int high)
 {
 	if (low < high)
 	{
@@ -180,7 +210,8 @@ void RecursiveQuickSort(int arr[], int low, int high)
 	}
 }
 
-int GetArrayPivotPos(int arr[], int low, int high)
+template<class T>
+int GetArrayPivotPos(T arr[], int low, int high)
 {
 	int aux;
 	int pivot = arr[high];
@@ -190,18 +221,19 @@ int GetArrayPivotPos(int arr[], int low, int high)
 	{
 		if (arr[j] < pivot)
 		{
-			SwapNumbers(&arr[j], &arr[i]);
+			SwapPositions(arr[j], arr[i]);
 			i++;
 		}
 	}
 
-	SwapNumbers(&arr[high], &arr[i]);
+	SwapPositions(arr[high], arr[i]);
 
 
 	return i;
 }
 
-void PrintArray(int arr[], int size)
+template<class T>
+void PrintArray(T arr[], int size)
 {
 
 	for (int i = 0; i < size; i++)
@@ -211,11 +243,12 @@ void PrintArray(int arr[], int size)
 	cout << endl;
 }
 
-void SwapNumbers(int* a, int* b)
+template<class T>
+void SwapPositions(T& a, T& b)
 {
-	int t = *a;
-	*a = *b;
-	*b = t;
+	int t = a;
+	a = b;
+	b = t;
 }
 
 #pragma endregion Sorts
@@ -223,7 +256,8 @@ void SwapNumbers(int* a, int* b)
 
 #pragma region Seacrh
 
-bool SequentialSearch(int arr[], int size, int find)
+template<class T>
+bool SequentialSearch(T arr[], int size, T find)
 {
 	int i = 0;
 	for (; i < size && arr[i] != find; i++);
@@ -231,7 +265,8 @@ bool SequentialSearch(int arr[], int size, int find)
 }
 
 // Requires an ascendening order array
-bool BinarySearch(int arr[], int size, int find)
+template<class T>
+bool BinarySearch(T arr[], int size, T find)
 {
 	int high = size - 1;
 	int low = 0;
@@ -239,7 +274,7 @@ bool BinarySearch(int arr[], int size, int find)
 
 	while (high >= low && arr[mid] != find)
 	{
-		cout << low << mid << high << endl;
+		//cout << low << mid << high << endl;
 		if (arr[mid] < find)
 			low = mid + 1;
 		if (arr[mid] > find)
