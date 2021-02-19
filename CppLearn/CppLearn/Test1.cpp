@@ -19,31 +19,25 @@ int GetArrayPivotPos(int arr[], int low, int high);
 void PrintArray(int arr[], int size);
 void SwapNumbers(int* a, int* b);
 
+bool SequentialSearch(int arr[], int size, int find);
+bool BinarySearch(int arr[], int size, int find);
+
+
+
 
 int main()
 {
 	//StringTests();
 	//FloatTests();
 
-#pragma region SortTests
 
-	int arrayToSort[] = { 4,1,23,6,7,8,4,0,3 };
-	int arrayToSort1[] = { 1,2,3,7,4,5,6,7,8,9 };
-
-#pragma region BubbleSort
+	int arrayToSort[] = { 4, 1, 23, 6, 7, 8, 4, 0 };
+	int arrayToSort1[] = { 1, 2, 3, 7, 4, 5, 6, 7, 8, 9 };
 
 	QuickSort(arrayToSort, size(arrayToSort));
 	PrintArray(arrayToSort, size(arrayToSort));
-
-	//BubbleSort(arrayToSort1, size(arrayToSort1));
-	//PrintArray(arrayToSort1, size(arrayToSort1));
-
-#pragma endregion BubbleSort
-
-#pragma endregion SortTests
-
-
-
+	if (BinarySearch(arrayToSort, size(arrayToSort), 24))
+			cout << "found" << endl;
 	system("pause");
 
 	return 0;
@@ -127,11 +121,11 @@ void SelectionSort(int arr[], int size)
 {
 	int aux;
 
-	for (size_t i = 0; i < size - 1; i++)
+	for (int i = 0; i < size - 1; i++)
 	{
 		int minPos = i;
 		// Get the min number on the rest of the array
-		for (size_t j = i + 1; j < size; j++)
+		for (int j = i + 1; j < size; j++)
 			if (arr[j] < arr[minPos])
 				minPos = j;
 
@@ -154,7 +148,7 @@ void ShellSort(int arr[], int size)
 	{
 		ordered = true;
 		// Loop through the array checking the numbers with the current gap
-		for (size_t i = 0; i < size - gap; i++)
+		for (int i = 0; i < size - gap; i++)
 		{
 			// If the numbers arent in order swap them
 			if (arr[i] > arr[i + gap])
@@ -192,7 +186,7 @@ int GetArrayPivotPos(int arr[], int low, int high)
 	int pivot = arr[high];
 	int i = low;
 
-	for (size_t j = low; j < high; j++)
+	for (int j = low; j < high; j++)
 	{
 		if (arr[j] < pivot)
 		{
@@ -210,7 +204,7 @@ int GetArrayPivotPos(int arr[], int low, int high)
 void PrintArray(int arr[], int size)
 {
 
-	for (size_t i = 0; i < size; i++)
+	for (int i = 0; i < size; i++)
 	{
 		cout << arr[i] << ", ";
 	}
@@ -223,4 +217,37 @@ void SwapNumbers(int* a, int* b)
 	*a = *b;
 	*b = t;
 }
+
 #pragma endregion Sorts
+
+
+#pragma region Seacrh
+
+bool SequentialSearch(int arr[], int size, int find)
+{
+	int i = 0;
+	for (; i < size && arr[i] != find; i++);
+	return i < size;
+}
+
+// Requires an ascendening order array
+bool BinarySearch(int arr[], int size, int find)
+{
+	int high = size - 1;
+	int low = 0;
+	int mid = (high + low) / 2;
+
+	while (high >= low && arr[mid] != find)
+	{
+		cout << low << mid << high << endl;
+		if (arr[mid] < find)
+			low = mid + 1;
+		if (arr[mid] > find)
+			high = mid - 1;
+
+		mid = (high + low) / 2;
+	}
+
+	return high >= low;
+}
+#pragma endregion Search
